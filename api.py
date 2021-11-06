@@ -1,15 +1,15 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_restful import Resource, Api
 from gpiozero import LED
 
 leds = {}
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 api = Api(app)
 
 class HelloWorld(Resource):
     def get(self):
-        return {'hello': 'world'}
+        return send_from_directory('static', 'index.html')
 
 class PinTest(Resource):
     def get(self):
