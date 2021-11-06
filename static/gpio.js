@@ -3,7 +3,16 @@ console.log(document.getElementsByClassName('led_button'));
 
 Array.from(document.getElementsByClassName('led_button')).forEach(function(element) {
     element.addEventListener('click', () => {
-        httpGetAsync('/gpio/4');
+        httpGetAsync('/led/4');
+    });
+});
+
+console.log(document.getElementsByClassName('servo_value'));
+Array.from(document.getElementsByClassName('servo_value')).forEach(function(element) {
+    element.addEventListener('input', () => {
+        console.log('server value changed.');
+        const servoValue = element.value;
+        httpGetAsync(`/servo/17/${servoValue}`);
     });
 });
 

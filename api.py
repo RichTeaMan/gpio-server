@@ -1,8 +1,9 @@
 from flask import Flask, send_from_directory
 from flask_restful import Resource, Api
-from gpiozero import LED
+from gpiozero import LED, Servo
 
 leds = {}
+servos = {}
 
 app = Flask(__name__, static_folder='static')
 api = Api(app)
@@ -18,18 +19,24 @@ class PinTest(Resource):
         leds[4].toggle()
         return {'done': 'maybe'}
 
-class Gpio(Resource):
+class LedHandler(Resource):
     def get(self, gpio_id):
-        print(gpio_id)
-        print(type(gpio_id))
         if (gpio_id not in leds):
             leds[gpio_id] = LED(gpio_id)   
         leds[gpio_id].toggle()        
         return {gpio_id: leds[gpio_id].is_active}
 
+class ServoHandler(Resource):
+    def get(self, gpio_id, servo_value):
+        if (gpio_id not in servos):
+            servos[gpio_id] = Servo(gpio_id)
+        servos[gpio_id].value = servo_value
+        return {gpio_id: servos[gpio_id].value}
+
 api.add_resource(HelloWorld, '/')
 api.add_resource(PinTest, '/pin')
-api.add_resource(Gpio, '/gpio/<int:gpio_id>/')
+api.add_resource(LedHandler, '/led/<int:gpio_id>/')
+api.add_resource(ServoHandler, '/servo/<int:gpio_id>/<float(signed=True):servo_value>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
