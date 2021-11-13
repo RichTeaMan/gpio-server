@@ -16,6 +16,20 @@ Array.from(document.getElementsByClassName('servo_value')).forEach(function(elem
     });
 });
 
+Array.from(document.getElementsByClassName('servo_min')).forEach(function(element) {
+    element.addEventListener('click', () => {
+        console.log('server min changed.');
+        httpGetAsync(`/servo/17/min`);
+    });
+});
+
+Array.from(document.getElementsByClassName('servo_max')).forEach(function(element) {
+    element.addEventListener('click', () => {
+        console.log('server max changed.');
+        httpGetAsync(`/servo/17/max`);
+    });
+});
+
 function httpGetAsync(url, callback) {
     var xmlHttp = new XMLHttpRequest();
     if (callback) {
